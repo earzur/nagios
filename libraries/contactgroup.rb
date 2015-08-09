@@ -52,7 +52,7 @@ class Nagios
     def import(hash)
       update_options(hash)
       update_members(hash, 'members', Nagios::Contact, true)
-      update_members(hash, 'contactgroups_members', Nagios::Contactgroup, true)
+      update_members(hash, 'contactgroup_members', Nagios::Contactgroup, true)
     end
 
     def members_list
