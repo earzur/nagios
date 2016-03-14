@@ -278,6 +278,11 @@ class Nagios
     nil
   end
 
+  def get_ipaddress(obj)
+    return obj['cloud']['public_ipv4'] unless blank?(obj['cloud']) || blank?(obj['cloud']['public_ipv4'])
+    return obj['ipaddress']
+  end
+
   # rubocop:disable MethodLength
   def push_node(obj)
     groups = get_groups(obj)
@@ -286,7 +291,7 @@ class Nagios
 
     host = find(Nagios::Host.new(hostname))
     # TODO: merge the ip_to_monitor funtion into this logic here
-    host.address = obj['ipaddress']
+    host.address = get_ipaddress(obj) # obj['ipaddress']
     host.import(obj['nagios']) unless obj['nagios'].nil?
 
     groups.each do |r|
