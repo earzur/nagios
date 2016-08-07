@@ -54,6 +54,32 @@ else
   Chef::Log.warn 'NAGIOS: NGINX setup does not have a dispatcher provided'
 end
 
+include_recipe "letsencrypt::default"
+
+# Generate a self-signed if we don't have a cert to prevent bootstrap problems
+letsencrypt_selfsigned "nagios.kronoz.ch" do
+    key     node['nagios']['ssl_cert_key']
+    crt     node['nagios']['ssl_cert_file']
+    owner   "root"
+    group   "root"
+    notifies :restart, "service[nginx]", :immediate
+    not_if do
+        # Only generate a self-signed cert if needed
+        ::File.exists?(::File.join(node['nginx']['dir'],'conf.d','artifactory.cert'))
+    end
+end
+
+# Get and auto-renew the certificate from letsencrypt
+letsencrypt_certificate "nagios.kronoz.ch" do
+    key         node['nagios']['ssl_cert_key']
+    fullchain   node['nagios']['ssl_cert_file']
+    owner   "root"
+    group   "root"
+    method "http"
+    wwwroot node['nagios']['docroot']
+    notifies :restart, "service[nginx]", :immediate
+end
+
 template File.join(node['nginx']['dir'], 'sites-available', 'nagios3.conf') do
   source 'nginx.conf.erb'
   mode '0644'
