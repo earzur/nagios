@@ -6,7 +6,7 @@ server {
     allow all;
   }
   location / {
-    rewrite .* https://@nagios_url:@listen_port
+    rewrite .* https://<%=@nagios_url%>:<%=@listen_port%>
   }
 }
 <% end -%>
