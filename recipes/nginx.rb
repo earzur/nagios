@@ -65,7 +65,7 @@ letsencrypt_selfsigned "nagios.kronoz.ch" do
     notifies :restart, "service[nginx]", :immediate
     not_if do
         # Only generate a self-signed cert if needed
-        ::File.exists?(::File.join(node['nginx']['dir'],'conf.d','artifactory.cert'))
+        ::File.exists?(node['nagios']['ssl_cert_file'])
     end
 end
 
