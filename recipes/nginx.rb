@@ -54,10 +54,10 @@ else
   Chef::Log.warn 'NAGIOS: NGINX setup does not have a dispatcher provided'
 end
 
-include_recipe "letsencrypt::default"
+include_recipe "acme::default"
 
 # Generate a self-signed if we don't have a cert to prevent bootstrap problems
-letsencrypt_selfsigned "nagios.kronoz.ch" do
+acme_selfsigned "nagios.kronoz.ch" do
     key     node['nagios']['ssl_cert_key']
     crt     node['nagios']['ssl_cert_file']
     owner   "root"
@@ -70,7 +70,7 @@ letsencrypt_selfsigned "nagios.kronoz.ch" do
 end
 
 # Get and auto-renew the certificate from letsencrypt
-letsencrypt_certificate "nagios.kronoz.ch" do
+acme_certificate "nagios.kronoz.ch" do
     key         node['nagios']['ssl_cert_key']
     fullchain   node['nagios']['ssl_cert_file']
     owner   "root"
