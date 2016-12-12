@@ -69,10 +69,16 @@ acme_selfsigned "nagios.kronoz.ch" do
     end
 end
 
+directory "#{node['nagios']['docroot']}/.well-known" do
+  owner 'root'
+  group 'root'
+  mode 0755
+end
+
 # Get and auto-renew the certificate from letsencrypt
 acme_certificate "nagios.kronoz.ch" do
-    key         node['nagios']['ssl_cert_key']
-    fullchain   node['nagios']['ssl_cert_file']
+    key              node['nagios']['ssl_cert_key']
+    fullchain         node['nagios']['ssl_cert_file']
     owner   "root"
     group   "root"
     method "http"

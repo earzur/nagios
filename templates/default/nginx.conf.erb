@@ -1,12 +1,12 @@
 <% if @https -%>
 server {
-  listen_port 80;
-  root <%= @docroot %>
+  listen 80;
+  root <%= @docroot %>;
   location ~ /.well-known {
     allow all;
   }
   location / {
-    rewrite .* https://<%=@nagios_url%>:<%=@listen_port%>
+    rewrite .* https://<%=@nagios_url%>:<%=@listen_port%>;
   }
 }
 <% end -%>
@@ -35,7 +35,7 @@ server {
   ssl_ciphers "EECDH+AESGCM:EDH+AESGCM:AES256+EECDH:AES256+EDH";
   ssl_ecdh_curve secp384r1; # Requires nginx >= 1.1.0
   ssl_session_cache shared:SSL:10m;
-  ssl_session_tickets off; # Requires nginx >= 1.5.9
+  #ssl_session_tickets off; # Requires nginx >= 1.5.9
   ssl_stapling on; # Requires nginx >= 1.3.7
   ssl_stapling_verify on; # Requires nginx => 1.3.7
 <% end %>
