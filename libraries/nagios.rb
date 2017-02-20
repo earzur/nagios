@@ -279,8 +279,12 @@ class Nagios
   end
 
   def get_ipaddress(obj)
-    return obj['cloud']['public_ipv4'] unless blank?(obj['cloud']) || blank?(obj['cloud']['public_ipv4'])
-    return obj['ipaddress']
+    if obj['fqdn'] =~ /infomaniak\.ch/
+      return obj['fqdn']
+    else
+      return obj['cloud']['public_ipv4'] unless blank?(obj['cloud']) || blank?(obj['cloud']['public_ipv4'])
+      return obj['ipaddress']
+    end
   end
 
   # rubocop:disable MethodLength
